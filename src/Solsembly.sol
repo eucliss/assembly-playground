@@ -33,6 +33,14 @@ contract Solsembly {
         }   
     }
 
+    function easyExponent(uint exponent, uint base) public pure returns (uint) {
+         
+        assembly {
+            mstore(0x0, exp(base, exponent))
+            return(0x0, 32)
+        }   
+    }
+
    function setStorageSlot1(uint256 val) public returns (uint256){
         assembly {
             // Store val in the first storage slot (storageSlot1)
@@ -51,6 +59,7 @@ contract Solsembly {
     // Return 1 if there is a remainder from division, 0 if not
     function remainderDivision(uint256 numerator, uint256 denominator) public pure returns(uint256) {
       assembly {
+        // 0x40 stores the location of the free mem
           let res:= mload(0x40)
             // If remainder, return 1
           if mulmod(numerator, 1, denominator) {
@@ -61,5 +70,37 @@ contract Solsembly {
           return(res, 0x20)
       }
     }
+
+    // Assembly conditional, switch on val, if 10 => 50, if 1 => 5, else 100
+    function switchAssembly(uint val) public pure returns (uint res) {
+        assembly {
+            switch val
+            case  10 {
+                res := 50
+            }
+            case 1 { 
+                res := 5
+            }
+            default {
+                res := 100
+            }
+        }
+    }
+
+    // Assembly return
+    function returnSimpleAssembly(uint val) public pure returns (uint) {
+        assembly {
+            // Get location of free memory
+            let _ptr := mload(0x40)
+            // Store value at free memory location
+            mstore(_ptr, val)
+            // Return 32 bytes from that location
+            return(_ptr, 0x20)
+        }
+    }
+
+    /*
+     * Assembly Revert and Custom Errors
+     */
 
 }

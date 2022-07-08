@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 import "ds-test/test.sol";
 import {Solsembly} from "../Solsembly.sol";
 import {CheatCodes} from "./utils/CheatCodes.sol";
+import {console} from "@std/console.sol";
 
 contract ContractTest is DSTest {
     Solsembly public c; 
@@ -37,6 +38,28 @@ contract ContractTest is DSTest {
         res = c.exponential(5, 2);
         assertEq(res, 0x20);
     }
+
+    function testEasyExponential() public {
+        uint256 res = c.easyExponent(3, 3);
+        assertEq(res, 0x1B);
+        res = c.easyExponent(5, 2);
+        assertEq(res, 0x20);
+    }
+
+    function testConditional() public {
+        uint256 res = c.switchAssembly(10);
+        assertEq(res, 50);
+        res = c.switchAssembly(1);
+        assertEq(res, 5);
+        res = c.switchAssembly(0);
+        assertEq(res, 100);
+    }
+
+    function testReturnSimpleAssembly() public {
+        uint256 res = c.returnSimpleAssembly(10);
+        assertEq(res, 10);
+    }
+
 
 
 }
